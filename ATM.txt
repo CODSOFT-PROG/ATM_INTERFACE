@@ -1,0 +1,116 @@
+import java.util.Scanner;
+
+public class ATM {
+    
+   
+    private double balance;
+
+
+    public ATM(double initialBalance) {
+      
+        if (initialBalance >= 0) {
+            this.balance = initialBalance;
+        } else {
+            this.balance = 0;
+            System.out.println("Invalid initial balance. Setting balance to $0.");
+        }
+    }
+
+   
+    public void displayMenu() {
+        System.out.println("\n===== ATM Menu =====");
+        System.out.println("1. Check Balance");
+        System.out.println("2. Deposit");
+        System.out.println("3. Withdraw");
+        System.out.println("4. Exit");
+    }
+
+    
+    public void handleOption(int option) {
+        Scanner scanner = new Scanner(System.in);
+
+        switch (option) {
+            case 1:
+                checkBalance();  
+                break;
+            case 2:
+                System.out.print("Enter amount to deposit: $");
+                double depositAmount = getValidInput();  
+                deposit(depositAmount);  
+                break;
+            case 3:
+                System.out.print("Enter amount to withdraw: $");
+                double withdrawAmount = getValidInput();  
+                withdraw(withdrawAmount);  
+                break;
+            case 4:
+                System.out.println("Thank you for using the ATM. Goodbye!");
+                break;
+            default:
+                System.out.println("Invalid option. Please choose a valid option.");
+        }
+    }
+
+    
+    public void checkBalance() {
+        System.out.println("Current Balance: $" + balance);
+    }
+
+    
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;  
+            System.out.println("Successfully deposited $" + amount);
+        } else {
+            System.out.println("Invalid deposit amount. Please enter a positive value.");
+        }
+    }
+
+    
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;  
+            System.out.println("Successfully withdrawn $" + amount);
+        } else if (amount > balance) {
+            System.out.println("Insufficient funds. Unable to withdraw $" + amount);
+        } else {
+            System.out.println("Invalid withdrawal amount. Please enter a positive value.");
+        }
+    }
+
+   
+    public double getValidInput() {
+        Scanner scanner = new Scanner(System.in);
+        double amount;
+        
+        
+        while (true) {
+            try {
+                amount = Double.parseDouble(scanner.nextLine());  
+                if (amount >= 0) {
+                    return amount;  
+                } else {
+                    System.out.println("Please enter a valid positive number.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a numeric value.");
+            }
+        }
+    }
+
+    
+    public static void main(String[] args) {
+        
+        ATM atm = new ATM(500.00);
+        Scanner scanner = new Scanner(System.in);
+        int option;
+
+        
+        do {
+            atm.displayMenu();  
+            System.out.print("Choose an option: ");
+            option = scanner.nextInt();  
+            atm.handleOption(option);  
+        } while (option != 4);  
+    }
+}
